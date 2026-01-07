@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        width: 400px;
+        min-height: 300px;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 10px;
+      }
+
+      .tabs {
+        display: flex;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #ccc;
+      }
+
+      .tab {
+        padding: 10px 20px;
+        cursor: pointer;
+        border: none;
+        background: none;
+        font-size: 14px;
+      }
+
+      .tab.active {
+        background: #007bff;
+        color: white;
+        border-radius: 5px 5px 0 0;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .input-group {
+        margin-bottom: 15px;
+      }
+
+      .input-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        font-size: 14px;
+        box-sizing: border-box;
+      }
+
+      .btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 3px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-right: 10px;
+      }
+
+      .btn-primary {
+        background: #007bff;
+        color: white;
+      }
+
+      .btn-secondary {
+        background: #6c757d;
+        color: white;
+      }
+
+      .status {
+        margin-top: 10px;
+        padding: 8px;
+        border-radius: 3px;
+        font-size: 12px;
+        display: none;
+      }
+
+      .status.success {
+        background: #d4edda;
+        color: #155724;
+      }
+      .status.error {
+        background: #f8d7da;
+        color: #721c24;
+      }
+
+      .debug-logs {
+        height: 200px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #f8f8f8;
+        font-family: monospace;
+        font-size: 12px;
+      }
+
+      .log-entry {
+        margin-bottom: 5px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 3px;
+      }
+
+      .timestamp {
+        color: #666;
+        font-size: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tabs">
+      <button class="tab active" data-tab="profile">Profile</button>
+      <button class="tab" data-tab="csv">CSV Profiles</button>
+      <button class="tab" data-tab="ticketmaster">Profile Details</button>
+      <button class="tab" data-tab="logs">Debug Logs</button>
+    </div>
+
+    <div id="profile-content" class="tab-content active">
+      <div class="input-group">
+        <label for="profile-id">Profile ID:</label>
+        <input type="text" id="profile-id" placeholder="Enter profile ID (e.g., 01JA)" />
+      </div>
+
+      <button id="save-profile" class="btn btn-primary">Save</button>
+      <button id="clear-profile" class="btn btn-secondary">Clear</button>
+
+      <div id="status" class="status"></div>
+
+      <div id="csv-info" style="margin-top: 15px; padding: 10px; background: #e8f4f8; border-radius: 5px; font-size: 12px;">
+        <strong>CSV Status:</strong> <span id="csv-count">Checking...</span>
+      </div>
+    </div>
+
+    <div id="csv-content" class="tab-content">
+      <div class="input-group">
+        <label for="csv-profile-select">Select CSV Profile:</label>
+        <select id="csv-profile-select" style="width: 100%; padding: 8px; font-size: 14px;">
+          <option value="">-- Select Profile --</option>
+        </select>
+      </div>
+
+      <button id="load-csv-profile" class="btn btn-primary">Load Profile</button>
+      <button id="open-csv-settings" class="btn btn-secondary">CSV Settings</button>
+
+      <div id="csv-status" class="status"></div>
+
+      <div id="current-csv-profile" style="margin-top: 15px; padding: 10px; background: #f8f8f8; border-radius: 5px; font-size: 11px; font-family: monospace; max-height: 150px; overflow-y: auto;">
+        No profile selected
+      </div>
+    </div>
+    <div id="ticketmaster-content" class="tab-content">
+      <div class="input-group">
+        <label for="tm-password">New Ticketmaster Password:</label>
+        <input type="text" id="tm-password" placeholder="Enter new password" />
+      </div>
+
+      <button id="save-tm-password" class="btn btn-primary">Save</button>
+
+      <div id="tm-status" class="status"></div>
+    </div>
+
+    <div id="logs-content" class="tab-content">
+      <div id="debug-logs" class="debug-logs">Loading logs...</div>
+      <button id="clear-logs" class="btn btn-secondary" style="margin-top: 10px">Clear Logs</button>
+    </div>
+
+    <script src="popup.js"></script>
+  </body>
+</html>

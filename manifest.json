@@ -1,0 +1,75 @@
+{
+    "manifest_version": 3,
+    "name": "TM AutoFill",
+    "description": "TM Autofill extension using manifest v3",
+    "version": "0.0.1",
+    "icons": {
+        "16": "logo/logo-16.png",
+        "48": "logo/logo-48.png",
+        "128": "logo/logo-128.png"
+    },
+    "options_page": "settings/settings.html",
+    "action": {
+        "default_title": "TM AutoFill",
+        "default_popup": "popup/popup.html"
+    },
+    "permissions": [
+        "activeTab",
+        "tabs",
+        "storage",
+        "scripting",
+        "contextMenus",
+        "declarativeContent",
+        "webNavigation",
+        "identity",
+        "identity.email",
+        "commands",
+        "management",
+        "webRequest",
+        "alarms"
+    ],
+    "commands": {
+        "autofill": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+Z"
+            },
+            "description": "Autofill"
+        }
+    },
+    "host_permissions": [
+        "*://*/*"
+    ],
+    "background": {
+        "service_worker": "service-worker.js"
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "foreground.js"
+            ],
+            "matches": [
+                "*://accounts.google.com/*",
+                "*://*.live.com/*",
+                "*://*.microsoftonline.com/*",
+                "*://mail.google.com/*",
+                "*://mail-settings.google.com/*",
+                "*://*.ticketmaster.com/*",
+                "*://*.ticketmaster.ca/*",
+                "*://*.livenation.com/*",
+                "*://*.livenation.ca/*",
+                "*://seatgeek.com/*",
+                "*://mlb.tickets.com/*",
+                "*://*.evenue.net/*",
+                "*://*.axs.com/*",
+                "*://wellsfargocenter.evenue.net/*",
+                "*://*.ticketstoday.com/*",
+                "*://app.multiloginapp.com/*",
+                "*://*.verizonwireless.com/*",
+                "*://*.go.seated.com/*",
+                "*://*.fifa.com/*",
+                "*://*.tickets.fifa.com/*"
+            ],
+            "all_frames": true
+        }
+    ]
+}

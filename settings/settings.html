@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="settings.css">
+    <title>TM AutoFill - CSV Settings</title>
+</head>
+<body>
+    <div class="container">
+        <h1>TM AutoFill - CSV Profile Data</h1>
+
+        <div class="section">
+            <h2>Load Profile Data from CSV</h2>
+            <p>Upload a CSV file or paste CSV content below. The extension will use this data instead of the server.</p>
+
+            <div class="upload-section">
+                <label for="csvFile">Upload CSV File:</label>
+                <input type="file" id="csvFile" accept=".csv">
+            </div>
+
+            <div class="paste-section">
+                <label for="csvText">Or Paste CSV Content:</label>
+                <textarea id="csvText" placeholder="profile_name,acc_email,tm_pass,fname,lname,address_address,address_city,address_state,address_zip,tel,visa_num,visa_exp,visa_cvv,amex_num,amex_exp,amex_cvv,gmail_pass,gmail_recovery_email,gmail_recovery_phone,event_pass,seatgeek_pass,axs_pass
+01JA,john@gmail.com,Password123,John,Doe,123 Main St,New York,NY,10001,5551234567,4111111111111111,12/25,123,371111111111111,12/25,1234,GmailPass123,recovery@gmail.com,5559876543,EVENTCODE,SeatGeekPass,AxsPass"></textarea>
+            </div>
+
+            <div class="button-row">
+                <button id="loadCsv" class="btn primary">Load CSV Data</button>
+                <button id="clearData" class="btn danger">Clear All Data</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Current Profile</h2>
+            <div class="profile-selector">
+                <label for="profileSelect">Select Profile:</label>
+                <select id="profileSelect">
+                    <option value="">-- Select Profile --</option>
+                </select>
+                <button id="loadProfile" class="btn">Load Selected Profile</button>
+            </div>
+            <div id="currentProfile" class="profile-info">
+                <p>No profile loaded</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Loaded Profiles</h2>
+            <div id="profileList" class="profile-list">
+                <p>No profiles loaded yet</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>CSV Format Reference</h2>
+            <p>Your CSV should have these columns (first row is header):</p>
+            <code class="csv-format">profile_name,acc_email,tm_pass,fname,lname,full_name,address_address,address_city,address_state,address_zip,tel,visa_num,visa_exp,visa_cvv,amex_num,amex_exp,amex_cvv,extra_num,extra_exp,extra_cvv,gmail_pass,gmail_recovery_email,gmail_recovery_phone,event_pass,seatgeek_pass,axs_pass</code>
+        </div>
+
+        <div id="status" class="status"></div>
+    </div>
+
+    <script src="settings.js"></script>
+</body>
+</html>
