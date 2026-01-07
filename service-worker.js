@@ -532,6 +532,7 @@ function loadProfileData1() {
 chrome.runtime.onInstalled.addListener(() => {
   console.log("extension onInstalled");
   initialize();
+  fetchCsvFromUrl(); // Auto-fetch CSV from saved URL
   setTimeout(() => loadProfileData1(), 1000);
   chrome.alarms.create("SYNC_DB", { periodInMinutes: sync_interval });
 });
@@ -539,9 +540,95 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onStartup.addListener(() => {
   console.log("extension onStartup");
   initialize();
+  fetchCsvFromUrl(); // Auto-fetch CSV from saved URL
   setTimeout(() => loadProfileData1(), 1000);
   chrome.alarms.create("SYNC_DB", { periodInMinutes: sync_interval });
 });
+
+/**
+ * Fetch CSV data from saved Google Sheets URL
+ */
+async function fetchCsvFromUrl() {
+  try {
+    const data = await chrome.storage.local.get(['csvUrl']);
+    if (!data.csvUrl) {
+      console.log("No CSV URL saved");
+      return;
+    }
+
+    console.log("Fetching CSV from URL:", data.csvUrl);
+    const response = await fetch(data.csvUrl);
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    const csvContent = await response.text();
+    const profiles = parseCsvContent(csvContent);
+
+    if (profiles.length > 0) {
+      await chrome.storage.local.set({ csvProfiles: profiles });
+      console.log(`Loaded ${profiles.length} profiles from CSV URL`);
+      debugLog(`CSV: Loaded ${profiles.length} profiles from URL`);
+    }
+  } catch (error) {
+    console.error("Error fetching CSV:", error);
+    debugLog("CSV fetch error: " + error.message);
+  }
+}
+
+/**
+ * Parse CSV content into profile objects
+ */
+function parseCsvContent(csvContent) {
+  const lines = csvContent.split('\n').filter(line => line.trim());
+  if (lines.length < 2) return [];
+
+  const headers = parseCsvLine(lines[0]);
+  const profiles = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const values = parseCsvLine(lines[i]);
+    if (values.length === 0 || (values.length === 1 && values[0] === '')) continue;
+
+    const profile = {};
+    headers.forEach((header, index) => {
+      profile[header.trim()] = values[index] ? values[index].trim() : '';
+    });
+
+    if (!profile.full_name && profile.fname && profile.lname) {
+      profile.full_name = profile.fname + ' ' + profile.lname;
+    }
+
+    if (!profile.uuid) {
+      profile.uuid = profile.profile_name || 'profile_' + i;
+    }
+
+    profiles.push(profile);
+  }
+
+  return profiles;
+}
+
+function parseCsvLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    if (char === '"') {
+      inQuotes = !inQuotes;
+    } else if (char === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  result.push(current);
+
+  return result.map(val => val.replace(/^"|"$/g, '').trim());
+}
 
 /**
  * Functions to get OTP Code from Email and fill OTP Input

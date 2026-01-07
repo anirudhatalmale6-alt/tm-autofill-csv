@@ -11,23 +11,27 @@
         <h1>TM AutoFill - CSV Profile Data</h1>
 
         <div class="section">
-            <h2>Load Profile Data from CSV</h2>
-            <p>Upload a CSV file or paste CSV content below. The extension will use this data instead of the server.</p>
+            <h2>Google Sheets CSV URL (Recommended)</h2>
+            <p>Publish your Google Sheet as CSV and paste the URL here. Extension will auto-fetch profiles.</p>
 
-            <div class="upload-section">
-                <label for="csvFile">Upload CSV File:</label>
-                <input type="file" id="csvFile" accept=".csv">
-            </div>
-
-            <div class="paste-section">
-                <label for="csvText">Or Paste CSV Content:</label>
-                <textarea id="csvText" placeholder="profile_name,acc_email,tm_pass,fname,lname,address_address,address_city,address_state,address_zip,tel,visa_num,visa_exp,visa_cvv,amex_num,amex_exp,amex_cvv,gmail_pass,gmail_recovery_email,gmail_recovery_phone,event_pass,seatgeek_pass,axs_pass
-01JA,john@gmail.com,Password123,John,Doe,123 Main St,New York,NY,10001,5551234567,4111111111111111,12/25,123,371111111111111,12/25,1234,GmailPass123,recovery@gmail.com,5559876543,EVENTCODE,SeatGeekPass,AxsPass"></textarea>
+            <div class="input-group">
+                <label for="csvUrl">Google Sheets CSV URL:</label>
+                <input type="text" id="csvUrl" placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv">
             </div>
 
             <div class="button-row">
-                <button id="loadCsv" class="btn primary">Load CSV Data</button>
-                <button id="clearData" class="btn danger">Clear All Data</button>
+                <button id="saveUrl" class="btn primary">Save URL & Fetch</button>
+                <button id="refreshCsv" class="btn">Refresh Now</button>
+            </div>
+
+            <div class="help-text">
+                <strong>How to get URL:</strong><br>
+                1. Open Google Sheet<br>
+                2. File > Share > Publish to web<br>
+                3. Select "Comma-separated values (.csv)"<br>
+                4. Click Publish and copy the link<br>
+                <br>
+                Or use: https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/export?format=csv
             </div>
         </div>
 
@@ -46,21 +50,48 @@
         </div>
 
         <div class="section">
-            <h2>Loaded Profiles</h2>
+            <h2>Loaded Profiles (<span id="profileCount">0</span>)</h2>
             <div id="profileList" class="profile-list">
                 <p>No profiles loaded yet</p>
             </div>
         </div>
 
-        <div class="section">
-            <h2>CSV Format Reference</h2>
-            <p>Your CSV should have these columns (first row is header):</p>
-            <code class="csv-format">profile_name,acc_email,tm_pass,fname,lname,full_name,address_address,address_city,address_state,address_zip,tel,visa_num,visa_exp,visa_cvv,amex_num,amex_exp,amex_cvv,extra_num,extra_exp,extra_cvv,gmail_pass,gmail_recovery_email,gmail_recovery_phone,event_pass,seatgeek_pass,axs_pass</code>
+        <div class="section collapsed">
+            <h2 onclick="toggleSection(this)">CSV Format Reference (click to expand)</h2>
+            <div class="section-content">
+                <p>Your CSV should have these columns (first row is header):</p>
+                <code class="csv-format">profile_name,acc_email,tm_pass,fname,lname,full_name,address_address,address_city,address_state,address_zip,tel,visa_num,visa_exp,visa_cvv,amex_num,amex_exp,amex_cvv,extra_num,extra_exp,extra_cvv,gmail_pass,gmail_recovery_email,gmail_recovery_phone,event_pass,seatgeek_pass,axs_pass</code>
+            </div>
+        </div>
+
+        <div class="section collapsed">
+            <h2 onclick="toggleSection(this)">Manual CSV Upload (click to expand)</h2>
+            <div class="section-content">
+                <div class="upload-section">
+                    <label for="csvFile">Upload CSV File:</label>
+                    <input type="file" id="csvFile" accept=".csv">
+                </div>
+
+                <div class="paste-section">
+                    <label for="csvText">Or Paste CSV Content:</label>
+                    <textarea id="csvText" placeholder="profile_name,acc_email,tm_pass,..."></textarea>
+                </div>
+
+                <div class="button-row">
+                    <button id="loadCsv" class="btn primary">Load CSV Data</button>
+                    <button id="clearData" class="btn danger">Clear All Data</button>
+                </div>
+            </div>
         </div>
 
         <div id="status" class="status"></div>
     </div>
 
     <script src="settings.js"></script>
+    <script>
+        function toggleSection(el) {
+            el.parentElement.classList.toggle('collapsed');
+        }
+    </script>
 </body>
 </html>
